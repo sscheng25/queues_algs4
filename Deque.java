@@ -51,13 +51,43 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     // add the item to the back
-    public void addLast(Item item)
+    public void addLast(Item item) {
+        if (item == null) {
+            throw new java.lang.NullPointerException();
+        }
+
+        if (count == 0) {
+            last = new Node();
+            last.item = item;
+            first = last;
+        }
+        else {
+            Node oldlast = last;
+            last = new Node();
+            last.item = item;
+            last.prev = oldlast;
+            oldlast.next = last;
+        }
+        count++;
+    }
 
     // remove and return the item from the front
-    public Item removeFirst()
+    public Item removeFirst() {
+        Item oldfirst = first.item;
+        first.item = first.next.item;
+        first.next = first.next.next;
+        first.prev = null;
+        return oldfirst;
+    }
 
     // remove and return the item from the back
-    public Item removeLast()
+    public Item removeLast() {
+        Item oldlast = last.item;
+        last.item = last.prev.item;
+        last.prev = last.prev.prev;
+        last.next = null;
+        return oldlast;
+    }
 
     // return an iterator over items in order from front to back
     public Iterator<Item> iterator() {
