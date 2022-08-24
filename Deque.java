@@ -1,5 +1,6 @@
-import java.util.Iterator;
+import edu.princeton.cs.algs4.StdIn;
 
+import java.util.Iterator;
 
 public class Deque<Item> implements Iterable<Item> {
     private Node first;
@@ -122,21 +123,38 @@ public class Deque<Item> implements Iterable<Item> {
             return current != null;
         }
 
-        public boolean hasLast() {
-            return current != null;
-        }
-
         public Item next() {
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException();
+            }
+
             Item item = current.item;
             current = current.next;
             return item;
+        }
+
+        public void remove() {
+            throw new java.lang.UnsupportedOperationException();
         }
     }
 
 
     // unit testing (required)
     public static void main(String[] args) {
+        // int n = StdIn.readInt();
+        Deque<String> deque = new Deque<String>();
 
+        while (!StdIn.isEmpty()) {
+            String str = StdIn.readString();
+            deque.addFirst(str);
+            deque.addLast(str);
+        }
+        System.out.print("The size of the deque is: \n");
+        System.out.print(deque.size());
+        System.out.print("\n");
+        System.out.print(deque.removeLast());
+        System.out.print("\n");
+        System.out.println(deque.removeFirst());
     }
 
 
