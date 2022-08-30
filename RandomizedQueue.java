@@ -1,67 +1,90 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    private Node first;
-    private Node last;
-    private int count;
+    // initial capacity of underlying resizing array
+    private static final int INIT_CAPACITY = 8;
 
-    private class Node {
-        private Item item;
-        private Node next;
-        private Node prev;
-    }
+    private Item[] a;         // array of items
+    private int n;            // number of elements on stack
 
     // construct an empty randomized queue
     public RandomizedQueue() {
-        count = 0;
-        first = null;
-        last = null;
+        a = (Item[]) new Object[INIT_CAPACITY];
+        n = 0;
     }
 
     // is the randomized queue empty?
     public boolean isEmpty() {
-        return first == null;
+        return n == 0;
     }
 
     // return the number of items on the randomized queue
     public int size() {
-        return count;
+        return n;
+    }
+
+    // resize the underlying array holding the elements
+    private void resize(int capacity) {
+        assert capacity >= n;
+
+        // textbook implementation
+        Item[] copy = (Item[]) new Object[capacity];
+        for (int i = 0; i < n; i++) {
+            copy[i] = a[i];
+        }
+        a = copy;
     }
 
     // add the item
-    public void enqueue(Item item)
+    public void enqueue(Item item) {
+        if (n == a.length) resize(2 * a.length);    // double size of array if necessary
+        a[n++] = item;                            // add item
+    }
 
     // remove and return a random item
-    public Item dequeue()
+    public Item dequeue() {
+        if (isEmpty()) throw new NoSuchElementException("Stack underflow");
+        Item item = a[random];
+        a[random] = null;                              // to avoid loitering
+        n--;
+        // shrink size of array if necessary
+        if (n > 0 && n == a.length / 4) resize(a.length / 2);
+        return item;
+    }
+
 
     // return a random item (but do not remove it)
-    public Item sample()
+    public Item sample() {
+        if (isEmpty()) throw new NoSuchElementException("Stack underflow");
+        Item item = a[random];
+        return item;
+    }
 
     // return an independent iterator over items in random order
     public Iterator<Item> iterator() {
-        return new ListIterator();
+        return new ArrayIterator();
     }
 
-    private class ListIterator implements Iterator<Item> {
+    private class ArrayIterator implements Iterator<Item> {
 
-        private Node current = first;
+        private int i;
 
-        public boolean hasNext() {
-            return current != null;
+        public ArrayIterator() {
+            i = n - 1;
         }
 
-        public Item next() {
-            if (!hasNext()) {
-                throw new java.util.NoSuchElementException();
-            }
-
-            Item item = current.item;
-            current = current.next;
-            return item;
+        public boolean hasNext() {
+            return i >= 0;
         }
 
         public void remove() {
-            throw new java.lang.UnsupportedOperationException();
+            throw new UnsupportedOperationException();
+        }
+
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            return a[i--];
         }
     }
 
