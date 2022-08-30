@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.StdRandom;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -7,6 +9,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     private Item[] a;         // array of items
     private int n;            // number of elements on stack
+    // private int rand;
 
     // construct an empty randomized queue
     public RandomizedQueue() {
@@ -45,8 +48,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // remove and return a random item
     public Item dequeue() {
         if (isEmpty()) throw new NoSuchElementException("Stack underflow");
-        Item item = a[random];
-        a[random] = null;                              // to avoid loitering
+        int rand = StdRandom.uniform(0, n);
+        Item item = a[rand];
+        a[rand] = null;                              // to avoid loitering
         n--;
         // shrink size of array if necessary
         if (n > 0 && n == a.length / 4) resize(a.length / 2);
@@ -57,7 +61,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // return a random item (but do not remove it)
     public Item sample() {
         if (isEmpty()) throw new NoSuchElementException("Stack underflow");
-        Item item = a[random];
+        int rand = StdRandom.uniform(0, n);
+        Item item = a[rand];
         return item;
     }
 
