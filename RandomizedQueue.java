@@ -59,7 +59,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         if (n > 0 && n == a.length / 4) {
             resize(a.length / 2);
         }
-        int rand = StdRandom.uniform(n);
+        int rand = StdRandom.uniformInt(n);
         Item item = a[rand];
 
         if (rand < n - 1) {
@@ -81,7 +81,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             throw new NoSuchElementException("Stack underflow");
         }
 
-        int rand = StdRandom.uniform(n);
+        int rand = StdRandom.uniformInt(n);
         Item item = a[rand];
         return item;
     }

@@ -14,7 +14,7 @@ public class Permutation {
                 rq.enqueue(s);
             }
             else {
-                if (StdRandom.uniform() < (double) k / count) {
+                if (StdRandom.uniformDouble() < (double) k / count) {
                     rq.dequeue();
                     rq.enqueue(s);
                 }
